@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <blog-side></blog-side>
-        <blog-content></blog-content>
+        <router-view></router-view>
       </div>
     </div>
   </main>

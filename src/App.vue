@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div class="app">
     <blog-nav></blog-nav>
     <blog-main></blog-main>
     <blog-footer></blog-footer>
@@ -7,9 +7,9 @@
 </template>
 
 <script>
-  import blogNav from './components/blog-nav.vue';
-  import blogMain from './components/blog-main.vue';
-  import blogFooter from './components/blog-footer.vue';
+  import blogNav from './components/blog-nav';
+  import blogMain from './components/blog-main';
+  import blogFooter from './components/blog-footer';
 
   export default {
     name: 'app',

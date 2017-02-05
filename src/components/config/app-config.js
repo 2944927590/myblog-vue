@@ -7,5 +7,8 @@ export default  {
     newArticleNum : '5',
     hitArticleNum : '5',
     newArticleTitleNum: '16',
-    hitArticleTitleNum: '16'
+    hitArticleTitleNum: '16',
+    api: {
+      'home': 'http://localhost/blog/index.php/Home/'
+    }
 };

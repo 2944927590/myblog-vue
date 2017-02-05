@@ -41,6 +41,7 @@
 
 <script>
 import query from '../lib/core/data';
+import config from './config/app-config';
 
 export default {
 
@@ -59,11 +60,9 @@ export default {
   methods: {
     getNav() {
       let self = this;
-      query.query('/static/mock/nav.json', function (r) {
-        if(r.errCode == 200) {
-          self.doNav(r.data, function (res) {
-            self.lists = res;
-          });
+      query.query( config.api.home + 'nav/getNav', function (res) {
+        if (res.status === 1) {
+          self.lists = res.data;
         }
       }, 1000);
     },

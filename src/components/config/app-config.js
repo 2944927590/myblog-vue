@@ -10,6 +10,5 @@ export default  {
     hitArticleTitleNum: '16',
     api: {
       'home': 'http://localhost/blog/index.php/Home/'
-      
     }
 };

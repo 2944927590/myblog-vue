@@ -1,6 +1,7 @@
 export default  {
     title: 'xzq\'s Blog',
     indexShowNum: '6',
+    pagerMaxNum: '5',
     indexTitleLength: '30',
     indexContentLength: '150',
     emptyArticleMsg: "暂无文章",

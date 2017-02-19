@@ -33,6 +33,7 @@ let query = (uri, data, cb, _cacheTime) => {
   $.ajax({
     url: uri,
     data: data,
+    type: 'POST',
     success(res) {
       if(cacheTime) {
         cache.setItem(uri, res, cacheTime(res));

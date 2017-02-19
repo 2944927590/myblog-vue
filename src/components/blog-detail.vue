@@ -20,13 +20,7 @@
     <div class="col-md-12 article-icon">
       <ul>
         <li>
-
           <a href="javascript:;" data-is-praise="0" data-detail-id="" data-trigger="clickPraise"><i class="glyphicon glyphicon-thumbs-up"></i>&nbsp;赞</a>
-
-          <a class="praise" href="javascript:;" data-is-praise="1" data-detail-id="" data-trigger="clickPraise"><i class="glyphicon glyphicon-thumbs-up"></i>&nbsp;取消赞</a>
-
-          <a href="javascript:;" data-is-praise="0" data-detail-id="" data-trigger="clickPraise"><i class="glyphicon glyphicon-thumbs-up"></i>&nbsp;赞</a>
-
         </li>
         <li>
           <i class="glyphicon glyphicon-comment"></i>&nbsp;0人评论
@@ -34,18 +28,8 @@
       </ul>
     </div>
     <div class="col-md-12">
-
       <p class="article-pre"><i class="glyphicon glyphicon-chevron-up"></i>&nbsp;上一篇：无</p>
-
-      <p class="article-pre"><a href="javascript:;" data-go-route-reload="archive/detail/detail&detailId=111"><i class="glyphicon glyphicon-chevron-up"></i>&nbsp;上一篇：</a></p>
-
-
-
       <p class="article-next"><i class="glyphicon glyphicon-chevron-down"></i>&nbsp;下一篇：无</p>
-
-      <p class="article-next"><a href="javascript:;" data-go-route-reload="archive/detail/detail&detailId=12"><i class="glyphicon glyphicon-chevron-down"></i>&nbsp;下一篇：</a></p>
-
-
     </div>
   </div>
 </template>
@@ -98,9 +82,12 @@
     text-decoration: none;
     color: #333;
   }
-  .article-icon ul li a:hover ,
+  .article-icon ul li a:hover,
+  .article-icon ul li a:active,
+  .article-icon ul li a:visited,
   .article-pre a:hover,
   .article-next a:hover {
+    text-decoration: none;
     color: red;
   }
   .article-icon ul li a.praise {

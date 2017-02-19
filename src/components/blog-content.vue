@@ -24,12 +24,17 @@
             <div class="col-md-5"><a href="javascript:;" class="btn btn-success btn-sm pull-right btn-read-all" >阅读全文&gt;&gt;</a></div>
           </div>
         </article>
+
+        <pager v-if="listsCount" :totalNum="listsCount" :maxNum="maxNum" :currentNum="this.$route.params.p_num - 0"/>
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import Pager from './blog-pager.vue';
+
   import query from '../lib/core/data';
   import time from '../lib/core/time';
   import appConfig from './config/app-config';
@@ -39,9 +44,15 @@
 
     name: 'blog-content',
 
+    components: {
+      pager: Pager
+    },
+
     data() {
       return {
-        articles: []
+        articles: [],
+        maxNum: Number( appConfig.pagerMaxNum ),
+        listsCount: 0
       }
     },
 
@@ -51,8 +62,7 @@
 
     watch: {
       '$route' (to, from) {
-        // 对路由变化作出响应...
-
+        this.getDetail();
       }
     },
 
@@ -61,19 +71,21 @@
         const self = this;
         query.query( appConfig.api.home + 'blog/getArticleByCategoryId', {
           categoryId: this.$route.params.c_id,
-          pageNum: '1',
+          pageNum: this.$route.params.p_num,
           pageLimit: appConfig.indexShowNum
         }, function (r) {
           console.log(r);
           if (r.status === 1) {
-            self.timeToStr(r.data, function(articles) {
+            self.listsCount = Number( r.data.listsCount );
+            console.log(self.listsCount);
+            self.timeToStr(r.data.lists, function(articles) {
               self.articles = articles;
             });
           }
-        }, 1000);
+        }, 0);
       },
       timeToStr (details, cb) {
-        if(0 == details.length) {
+        if(!details || 0 == details.length) {
           cb([]);
         } else {
           details.forEach(function(item) {

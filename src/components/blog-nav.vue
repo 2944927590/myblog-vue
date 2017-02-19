@@ -7,7 +7,7 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav" id="navbar-nav" v-on:click="addOutsideActive($event)">
-            <router-link tag="li" to="/blog/category/0">
+            <router-link tag="li" to="/blog/category/c_id/0/p/1">
               <a>首页</a>
             </router-link>
             <router-link
@@ -27,7 +27,6 @@
                   <router-link
                     v-for="(child, i) in list.children"
                     :to="{ name: 'blog/category', params: { c_id: child.id } }"
-
                   >{{child.name}}</router-link>
                 </li>
               </ul>

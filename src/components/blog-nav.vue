@@ -3,28 +3,33 @@
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="javascript:;" >xzq's Blog</a>
+          <router-link class="navbar-brand" to="/blog" exact>xzq's Blog</router-link>
         </div>
         <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav" id="navbar-nav">
-            <li class="active" >
-              <a href="javascript:;" >首页 <span class="sr-only">(current)</span></a>
-            </li>
-            <li v-for="(list, index) in lists" v-if="list.children.length == 0">
-              <a href="javascript:;">{{list.name}}</a>
-            </li>
+          <ul class="nav navbar-nav" id="navbar-nav" v-on:click="addOutsideActive($event)">
+            <router-link tag="li" to="/blog/category/0">
+              <a>首页</a>
+            </router-link>
+            <router-link
+              tag="li"
+              v-for="(list, index) in lists"
+              v-if="list.children.length == 0"
+              :to="{ name: 'blog/category', params: { c_id: list.id } }">
+              <a>{{list.name}}</a>
+            </router-link>
             <li class="dropdown" v-for="(list, index) in lists" v-if="list.children.length != 0">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 {{list.name}}
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li><a href="javascript:;" v-for="(child, i) in list.children">{{child.name}}</a></li>
+                <li >
+                  <router-link
+                    v-for="(child, i) in list.children"
+                    :to="{ name: 'blog/category', params: { c_id: child.id } }"
+
+                  >{{child.name}}</router-link>
+                </li>
               </ul>
             </li>
           </ul>
@@ -40,6 +45,7 @@
 </template>
 
 <script>
+
 import query from '../lib/core/data';
 import config from './config/app-config';
 
@@ -49,7 +55,7 @@ export default {
 
   data() {
     return {
-      'lists': []
+      lists: []
     }
   },
 
@@ -58,7 +64,7 @@ export default {
   },
 
   methods: {
-    getNav() {
+    getNav () {
       let self = this;
       query.query( config.api.home + 'nav/getNav', function (res) {
         if (res.status === 1) {
@@ -66,21 +72,9 @@ export default {
         }
       }, 1000);
     },
-    doNav(topicList, cb) {
-      var arr = [];
-      topicList.forEach(function(v) {
-        var children = [];
-        if(0 == v['pid']) {
-          topicList.forEach(function(vv) {
-            if (vv['pid'] == v['id']) {
-              children.push(vv);
-            }
-          });
-          v['children'] = children;
-          arr.push(v);
-        }
-      });
-      cb && cb(arr);
+    addOutsideActive(e) {
+      $(e.target).parent().siblings().removeClass('active');
+      $(e.target).parents('li.dropdown').addClass('active');
     }
   }
 }
@@ -88,6 +82,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .page-head .navbar {
+    border-radius: 0;
+  }
   .search-button {
     margin-left: -4px;
     border-radius: 0;
@@ -100,6 +97,9 @@ export default {
   .dropdown-menu > .active > a:hover,
   .dropdown-menu > .active > a:focus {
     background-color: #8E8E8E;
+  }
+  .active {
+    background-color: #E7E7E7;
   }
 </style>
 

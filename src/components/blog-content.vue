@@ -49,29 +49,28 @@
       this.getDetail();
     },
 
+    watch: {
+      '$route' (to, from) {
+        // 对路由变化作出响应...
+
+      }
+    },
+
     methods: {
       getDetail() {
-        let self = this;
-        query.query('/static/mock/detail.json', function (r) {
-          if(r.errCode == 200) {
-            self.articleCut(r.data, appConfig.indexShowNum, function (articleCut) {
-              self.timeToStr(articleCut, function (res) {
-                self.articles = res;
-              });
+        const self = this;
+        query.query( appConfig.api.home + 'blog/getArticleByCategoryId', {
+          categoryId: this.$route.params.c_id,
+          pageNum: '1',
+          pageLimit: appConfig.indexShowNum
+        }, function (r) {
+          console.log(r);
+          if (r.status === 1) {
+            self.timeToStr(r.data, function(articles) {
+              self.articles = articles;
             });
           }
         }, 1000);
-      },
-      articleCut (details, num, cb) {
-        if (0 == details.length || !num) {
-          cb([]);
-        } else {
-          var arr = [];
-          for(var i = 0, length = details.length; i < num && i < length; i++) {
-            arr.push(details[i]);
-          }
-          cb(arr || []);
-        }
       },
       timeToStr (details, cb) {
         if(0 == details.length) {

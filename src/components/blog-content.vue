@@ -2,7 +2,7 @@
   <div class="col-md-9">
     <div id="container-left">
       <div class="headline">文章<span class="font-green">推荐</span></div>
-      <div class="article-list">
+      <div class="article-list" v-if="listsCount">
         <article v-for="(article, index) in articles">
           <div class="title">
             <a href="javascript:;" ><i class="glyphicon glyphicon-triangle-right icon-title"></i>&nbsp;{{article.title}}</a>
@@ -25,9 +25,10 @@
           </div>
         </article>
 
-        <pager v-if="listsCount" :totalNum="listsCount" :maxNum="maxNum" :currentNum="this.$route.params.p_num - 0"/>
+        <pager :totalNum="listsCount" :maxNum="maxNum" :currentNum="pNum" />
 
       </div>
+      <p class="empty-tip" v-if="!listsCount">{{emptyArticleMsg}}</p>
     </div>
   </div>
 </template>
@@ -51,8 +52,10 @@
     data() {
       return {
         articles: [],
+        emptyArticleMsg: appConfig.emptyArticleMsg,
         maxNum: Number( appConfig.pagerMaxNum ),
-        listsCount: 0
+        listsCount: 0,
+        pNum: Number( this.$route.params.p_num )
       }
     },
 
@@ -63,6 +66,7 @@
     watch: {
       '$route' (to, from) {
         this.getDetail();
+        this.pNum = Number( to.params.p_num );
       }
     },
 
@@ -78,7 +82,7 @@
           if (r.status === 1) {
             self.listsCount = Number( r.data.listsCount );
             console.log(self.listsCount);
-            self.timeToStr(r.data.lists, function(articles) {
+            self.timeToStr(r.data.lists, function( articles ) {
               self.articles = articles;
             });
           }
@@ -155,6 +159,10 @@
   article .sub-title .btn-read-all:hover {
     background-color: #74796F;
     border-color: #74796F;
+  }
+  p.empty-tip {
+    margin: 10px 0;
+    color: #777;
   }
 </style>
 

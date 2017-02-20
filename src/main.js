@@ -13,11 +13,11 @@ const routes = [
     path: '/blog',
     component: App,
     children: [{
-      path: 'category/c_id/:c_id/p/:p_num',
+      path: 'category/c_id/:c_id(\\d+)/p/:p_num(\\d+)',
       component: blogContent,
       name: 'blog/category',
     }, {
-      path: 'detail/d_id/:d_id/p/:p_num',
+      path: 'detail/d_id/:d_id(\\d+)/p/:p_num(\\d+)',
       component: blogDetail,
       name: 'blog/detail',
     }, {
@@ -31,7 +31,7 @@ const router = new VueRouter({
   mode: 'history',
   base: __dirname,
   routes: routes,
-  linkActiveClass: 'active'
+  linkActiveClass: ''
 });
 
 const app = new Vue({

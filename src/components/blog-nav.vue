@@ -6,19 +6,21 @@
           <router-link class="navbar-brand" to="/blog" exact>xzq's Blog</router-link>
         </div>
         <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav" id="navbar-nav" v-on:click="addOutsideActive($event)">
-            <router-link tag="li" to="/blog/category/c_id/0/p/1">
+          <ul class="nav navbar-nav" id="navbar-nav" >
+            <router-link tag="li" to="/blog/category/c_id/0/p/1" :class="{active: 0 == cId}">
               <a>首页</a>
             </router-link>
             <router-link
               tag="li"
               v-for="(list, index) in lists"
               v-if="list.children.length == 0"
-              :to="{ name: 'blog/category', params: { c_id: list.id } }">
+              :to="{ name: 'blog/category', params: { c_id: list.id, p_num: 1 } }"
+              :class="{active: list.id == cId}"
+            >
               <a>{{list.name}}</a>
             </router-link>
-            <li class="dropdown" v-for="(list, index) in lists" v-if="list.children.length != 0">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <li class="dropdown" v-for="(list, index) in lists" v-if="list.children.length != 0" :class="{active: list.id == pid}">
+              <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 {{list.name}}
                 <span class="caret"></span>
               </a>
@@ -26,7 +28,8 @@
                 <li >
                   <router-link
                     v-for="(child, i) in list.children"
-                    :to="{ name: 'blog/category', params: { c_id: child.id } }"
+                    :to="{ name: 'blog/category', params: { c_id: child.id, p_num: 1 } }"
+                    :class="{active: child.id == cId}"
                   >{{child.name}}</router-link>
                 </li>
               </ul>
@@ -54,7 +57,8 @@ export default {
 
   data() {
     return {
-      lists: []
+      lists: [],
+      cId: this.$route.params.c_id
     }
   },
 
@@ -62,6 +66,25 @@ export default {
     this.getNav();
   },
 
+  watch: {
+    '$route' (to, from) {
+      this.cId = Number( to.params.c_id );
+    }
+  },
+  computed: {
+    pid() {
+      const hasChild = this.lists.filter( (value) => {
+          return value.children.length > 0 ;
+      });
+      for ( let i = 0; i < hasChild.length; i ++ ) {
+        for ( let j = 0; j < hasChild[i].children.length; j ++ ) {
+          if ( hasChild[i].children[j].id  == this.cId ) {
+            return hasChild[i].children[j].pid;
+          }
+        }
+      }
+    }
+  },
   methods: {
     getNav () {
       let self = this;
@@ -83,6 +106,9 @@ export default {
 <style scoped>
   .page-head .navbar {
     border-radius: 0;
+  }
+  .navbar-nav>li:hover {
+    background-color: #eee;
   }
   .search-button {
     margin-left: -4px;

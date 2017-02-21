@@ -1,7 +1,7 @@
 export default  {
     title: 'xzq\'s Blog',
     indexShowNum: '2',
-    pagerMaxNum: '5',
+    pagerMaxNum: '3',
     indexTitleLength: '30',
     indexContentLength: '150',
     emptyArticleMsg: "暂时没有此分类下的文章~",

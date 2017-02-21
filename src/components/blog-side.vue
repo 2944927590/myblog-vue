@@ -3,34 +3,31 @@
     <p class="notice">
       <i class="glyphicon glyphicon-bullhorn"></i>&nbsp;<span>公告</span>
     </p>
-    <div class="notice-content">本博客文章如无特别注明，均为原创，欢迎转载、传阅，共同交流~</div>
+    <div class="notice-content">{{broadcast}}</div>
     <p class="blogger">
       <i class="glyphicon glyphicon-user"></i>&nbsp;<span>博主</span>
     </p>
     <div class="blogger-info">
-      <p><span>昵称：<a href="javascript:;">阿林十一</a></span></p>
-      <p><span>家乡：<a href="javascript:;">江西省-赣州市</a></span></p>
-      <p><span>现居住地：<a href="javascript:;">江西省-赣州市</a></span></p>
-      <p><span>园龄：<a href="javascript:;">8个月</a></span></p>
+      <p><span>昵称 ：<a href="javascript:;">{{userInfo.name}}</a></span></p>
+      <p><span>家乡 ：<a href="javascript:;">{{userInfo.hometown}}</a></span></p>
+      <p><span>性别 ：{{userInfo.sex}}</span></p>
+      <p><span>gitHub：<a href="javascript:;">{{userInfo.github}}</a></span></p>
+      <p><span>email：<a href="javascript:;">{{userInfo.email}}</a></span></p>
     </div>
     <p class="new-blog"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;<span>最新文章</span></p>
     <div class="new-blog-details">
       <ul>
-        <li><a href="javascript:;" title="你你你你你好哎你" >1.你你你你你好哎你</a></li>
-        <li><a href="javascript:;" title="图片背影" >2.图片背影</a></li>
-        <li><a href="javascript:;" title="fff" >3.fff</a></li>
-        <li><a href="javascript:;" title="怎么才能创建博客并有收益" >4.怎么才能创建博客并有收益</a></li>
-        <li><a href="javascript:;" title="猫咪猫咪嘿嘿嘿" >5.猫咪猫咪嘿嘿嘿</a></li>
+        <router-link tag="li" v-for="(article, index) in newArticle" :to="{name: 'blog/detail', params: { c_id: article.category_id, d_id: article.id }}" >
+          <a href="javascript:;" >{{index + 1}}.{{article.title}}</a>
+        </router-link>
       </ul>
     </div>
     <p class="reading-list"><i class="glyphicon glyphicon-list"></i>&nbsp;<span>阅读排行榜</span></p>
     <div class="reading-list-details">
       <ul>
-        <li><a href="javascript:;" title="图片背影" >1.图片背影</a></li>
-        <li><a href="javascript:;" title="匆匆那些年" >2.匆匆那些年</a></li>
-        <li><a href="javascript:;" title="猫咪猫咪嘿嘿嘿" >3.猫咪猫咪嘿嘿嘿</a></li>
-        <li><a href="javascript:;" title="你你你你你好哎你" >4.你你你你你好哎你</a></li>
-        <li><a href="javascript:;" title="怎么才能创建博客并有收益" >5.怎么才能创建博客并有收益</a></li>
+        <router-link tag="li" v-for="(article, index) in hitsArticle" :to="{name: 'blog/detail', params: { c_id: article.category_id, d_id: article.id }}" >
+          <a href="javascript:;" >{{index + 1}}.{{article.title}}</a>
+        </router-link>
       </ul>
     </div>
   </div>
@@ -38,22 +35,66 @@
 
 <script>
 
+  import query from '../lib/core/data';
+  import appConfig from './config/app-config';
+
   export default {
 
     name: 'blog-side',
 
     data() {
       return {
-
+        broadcast: '',
+        userInfo: {},
+        newArticle: [],
+        hitsArticle: []
       }
     },
 
     created() {
-
+      this.getBroadcast();
+      this.getUserInfo();
+      this.getNewArticle();
+      this.getHitsArticle();
     },
 
     methods: {
-
+      getBroadcast() {
+        const self = this;
+        query.query( appConfig.api.home + 'blog/getBroadcast', function (r) {
+          console.log(r);
+          if (r.status === 1) {
+            self.broadcast = r.data.broadcast.content;
+          }
+        }, 0);
+      },
+      getUserInfo() {
+        const self = this;
+        query.query( appConfig.api.home + 'blog/getUserInfo', function (r) {
+          console.log(r);
+          if (r.status === 1) {
+            self.userInfo = r.data.userInfo;
+          }
+        }, 0);
+      },
+      getNewArticle() {
+        const self = this;
+        query.query( appConfig.api.home + 'blog/getNewArticle', function (r) {
+          console.log(r);
+          if (r.status === 1) {
+            self.newArticle = r.data.newArticle;
+          }
+        }, 0);
+      },
+      getHitsArticle() {
+        const self = this;
+        query.query( appConfig.api.home + 'blog/getHitsArticle', function (r) {
+          console.log(r);
+          if (r.status === 1) {
+            self.hitsArticle = r.data.hitsArticle;
+          }
+        }, 0);
+      }
     }
   }
 </script>

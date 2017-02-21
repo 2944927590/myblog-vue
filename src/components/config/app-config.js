@@ -1,6 +1,6 @@
 export default  {
     title: 'xzq\'s Blog',
-    indexShowNum: '1',
+    indexShowNum: '2',
     pagerMaxNum: '5',
     indexTitleLength: '30',
     indexContentLength: '150',

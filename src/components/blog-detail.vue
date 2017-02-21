@@ -1,26 +1,26 @@
 <template>
-  <div class="col-md-9">
-    <div class="col-md-12 article-title">标题</div>
+  <div class="col-md-9" v-if="articles">
+    <div class="col-md-12 article-title"> {{articles.current.title}} </div>
     <div class="col-md-12 article-icon">
       <ul>
         <li>
-          <i class="glyphicon glyphicon-folder-open"></i>&nbsp;分类
+          <i class="glyphicon glyphicon-folder-open"></i>&nbsp;{{articles.current.category}}
         </li>
         <li>
-          <i class="glyphicon glyphicon-time"></i>&nbsp;2017/2/3
+          <i class="glyphicon glyphicon-time"></i>&nbsp;{{articles.current.create_time}}
         </li>
         <li>
-          <i class="glyphicon glyphicon-eye-open"></i>&nbsp;20人阅读
+          <i class="glyphicon glyphicon-eye-open"></i>&nbsp;{{articles.current.hits}}人阅读
         </li>
       </ul>
     </div>
     <div class="col-md-12">
-      <p class="article-content">文章内容</p>
+      <p class="article-content">{{articles.current.content}}</p>
     </div>
     <div class="col-md-12 article-icon">
       <ul>
         <li>
-          <a href="javascript:;" data-is-praise="0" data-detail-id="" data-trigger="clickPraise"><i class="glyphicon glyphicon-thumbs-up"></i>&nbsp;赞</a>
+          <a href="javascript:;"><i class="glyphicon glyphicon-thumbs-up"></i>&nbsp;赞</a>
         </li>
         <li>
           <i class="glyphicon glyphicon-comment"></i>&nbsp;0人评论
@@ -28,8 +28,8 @@
       </ul>
     </div>
     <div class="col-md-12">
-      <p class="article-pre"><i class="glyphicon glyphicon-chevron-up"></i>&nbsp;上一篇：无</p>
-      <p class="article-next"><i class="glyphicon glyphicon-chevron-down"></i>&nbsp;下一篇：无</p>
+      <p class="article-pre" v-if="articles.pre"><router-link :to="{name: 'blog/detail', params: { c_id: this.$route.params.c_id, d_id: articles.pre.id }}"><i class="glyphicon glyphicon-chevron-up"></i>&nbsp;上一篇：{{articles.pre.title}}</router-link></p>
+      <p class="article-next" v-if="articles.next"><router-link :to="{name: 'blog/detail', params: { c_id: this.$route.params.c_id, d_id: articles.next.id }}" ><i class="glyphicon glyphicon-chevron-down"></i>&nbsp;下一篇：{{articles.next.title}}</router-link></p>
     </div>
   </div>
 </template>
@@ -46,15 +46,37 @@
 
     data() {
       return {
-        articles: []
+        dId: this.$route.params.d_id,
+        articles: null
       }
     },
 
     created() {
-
+      this.getDetailById();
     },
 
-    methods: {}
+    watch: {
+      '$route' (to, from) {
+        this.dId = Number( to.params.d_id );
+        this.getDetailById();
+      }
+    },
+
+    methods: {
+      getDetailById() {
+        const self = this;
+        query.query( appConfig.api.home + 'blog/getDetailById', {
+          categoryId: this.$route.params.c_id,
+          detailId: this.dId
+        }, function (r) {
+          if (r.status === 1) {
+            self.articles = r.data.lists;
+            self.articles.current.create_time = time.format('yyyy/mm/dd', parseInt(self.articles.current.create_time) * 1000);
+            console.log(self.articles);
+          }
+        }, 0);
+      }
+    }
   }
 </script>
 
@@ -76,7 +98,7 @@
     display: inline-block;
     margin-left: 20px;
   }
-  .article-icon ul li a ,
+  .article-icon ul li a,
   .article-pre a,
   .article-next a {
     text-decoration: none;

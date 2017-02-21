@@ -5,7 +5,7 @@
       <div class="article-list" v-if="listsCount">
         <article v-for="(article, index) in articles">
           <div class="title">
-            <a href="javascript:;" ><i class="glyphicon glyphicon-triangle-right icon-title"></i>&nbsp;{{article.title}}</a>
+            <router-link :to="{name: 'blog/detail', params: { c_id: article.category_id, d_id: article.id }}" ><i class="glyphicon glyphicon-triangle-right icon-title"></i>&nbsp;{{article.title}}</router-link>
           </div>
           <div class="row">
             <div class="col-md-3">
@@ -21,7 +21,7 @@
             <div class="col-md-3"><i class="glyphicon glyphicon-time"></i>&nbsp;{{article.create_time}}</div>
             <div class="col-md-2"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;{{article.category}}</div>
             <div class="col-md-2"><i class="glyphicon glyphicon-eye-open"></i> {{article.hits}}</div>
-            <div class="col-md-5"><a href="javascript:;" class="btn btn-success btn-sm pull-right btn-read-all" >阅读全文&gt;&gt;</a></div>
+            <div class="col-md-5"><router-link :to="{name: 'blog/detail', params: { c_id: article.category_id, d_id: article.id }}" class="btn btn-success btn-sm pull-right btn-read-all" >阅读全文 &gt;&gt;</router-link></div>
           </div>
         </article>
 
@@ -83,6 +83,7 @@
             self.listsCount = Number( r.data.listsCount );
             console.log(self.listsCount);
             self.timeToStr(r.data.lists, function( articles ) {
+              console.log(articles);
               self.articles = articles;
             });
           }

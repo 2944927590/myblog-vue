@@ -17,7 +17,7 @@ const routes = [
       component: blogContent,
       name: 'blog/category',
     }, {
-      path: 'detail/d_id/:d_id(\\d+)/p/:p_num(\\d+)',
+      path: 'detail/c_id/:c_id(\\d+)/d_id/:d_id(\\d+)',
       component: blogDetail,
       name: 'blog/detail',
     }, {

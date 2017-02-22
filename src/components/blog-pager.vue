@@ -39,6 +39,8 @@
     },
     data() {
       return {
+        total: this.totalNum,
+        current: this.currentNum,
         max: this.maxNum,
         previous: {
           show: true,

@@ -2,7 +2,7 @@
   <footer class="page-foot">
     <div class="foot-line"></div>
     <div class="copyright">
-      ©2016
+      ©2017
       <a target="_blank" href="https://github.com/2944927590">alsy</a>
     </div>
   </footer>

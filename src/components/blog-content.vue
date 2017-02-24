@@ -39,7 +39,7 @@
   import query from '../lib/core/data';
   import time from '../lib/core/time';
   import appConfig from './config/app-config';
-
+  import bus from '../bus';
 
   export default {
 
@@ -73,17 +73,18 @@
     methods: {
       getDetail() {
         const self = this;
+        bus.$emit('triggerLoading');
         query.query( appConfig.api.home + 'blog/getArticleByCategoryId', {
           categoryId: this.$route.params.c_id,
           pageNum: this.$route.params.p_num,
           pageLimit: appConfig.indexShowNum
         }, function (r) {
-          console.log(r);
+          bus.$emit('triggerLoading');
           if (r.status === 1) {
             self.listsCount = Number( r.data.listsCount );
-            console.log(self.listsCount);
+            //console.log(self.listsCount);
             self.timeToStr(r.data.lists, function( articles ) {
-              console.log(articles);
+              //console.log(articles);
               self.articles = articles;
             });
           }

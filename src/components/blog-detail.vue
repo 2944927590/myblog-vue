@@ -35,6 +35,8 @@
 </template>
 
 <script>
+  import bus from '../bus';
+
   import query from '../lib/core/data';
   import time from '../lib/core/time';
   import appConfig from './config/app-config';
@@ -65,6 +67,7 @@
     methods: {
       getDetailById() {
         const self = this;
+        bus.$emit('triggerLoading');
         query.query( appConfig.api.home + 'blog/getDetailById', {
           categoryId: this.$route.params.c_id,
           detailId: this.dId
@@ -72,7 +75,8 @@
           if (r.status === 1) {
             self.articles = r.data.lists;
             self.articles.current.create_time = time.format('yyyy/mm/dd', parseInt(self.articles.current.create_time) * 1000);
-            console.log(self.articles);
+            //console.log(self.articles);
+            bus.$emit('triggerLoading');
           }
         }, 0);
       }

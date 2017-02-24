@@ -88,15 +88,13 @@ export default {
   methods: {
     getNav () {
       let self = this;
+      self.$emit('loading');
       query.query( config.api.home + 'nav/getNav', function (res) {
         if (res.status === 1) {
           self.lists = res.data;
+          self.$emit('loading');
         }
       }, 1000);
-    },
-    addOutsideActive(e) {
-      $(e.target).parent().siblings().removeClass('active');
-      $(e.target).parents('li.dropdown').addClass('active');
     }
   }
 }

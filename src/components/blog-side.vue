@@ -62,7 +62,6 @@
       getBroadcast() {
         const self = this;
         query.query( appConfig.api.home + 'blog/getBroadcast', function (r) {
-          console.log(r);
           if (r.status === 1) {
             self.broadcast = r.data.broadcast.content;
           }
@@ -71,7 +70,6 @@
       getUserInfo() {
         const self = this;
         query.query( appConfig.api.home + 'blog/getUserInfo', function (r) {
-          console.log(r);
           if (r.status === 1) {
             self.userInfo = r.data.userInfo;
           }
@@ -80,7 +78,6 @@
       getNewArticle() {
         const self = this;
         query.query( appConfig.api.home + 'blog/getNewArticle', function (r) {
-          console.log(r);
           if (r.status === 1) {
             self.newArticle = r.data.newArticle;
           }
@@ -89,7 +86,6 @@
       getHitsArticle() {
         const self = this;
         query.query( appConfig.api.home + 'blog/getHitsArticle', function (r) {
-          console.log(r);
           if (r.status === 1) {
             self.hitsArticle = r.data.hitsArticle;
           }

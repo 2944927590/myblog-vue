@@ -1,6 +1,8 @@
+const url = 'http://localhost/';
+
 export default  {
     title: 'xzq\'s Blog',
-    indexShowNum: '2',
+    indexShowNum: '4',
     pagerMaxNum: '3',
     indexTitleLength: '30',
     indexContentLength: '150',
@@ -9,7 +11,11 @@ export default  {
     hitArticleNum : '5',
     newArticleTitleNum: '16',
     hitArticleTitleNum: '16',
+    url: url,
     api: {
-      'home': 'http://localhost/blog/index.php/Home/'
+      home: url + 'blogadmin/index.php/Home/'
+    },
+    staticPath: {
+      file: url + 'blogadmin/Public/uploads/'
     }
 };

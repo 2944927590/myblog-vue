@@ -8,17 +8,17 @@
       <i class="glyphicon glyphicon-user"></i>&nbsp;<span>博主</span>
     </p>
     <div class="blogger-info">
-      <p><span>昵称 ：<a href="javascript:;">{{userInfo.name}}</a></span></p>
-      <p><span>家乡 ：<a href="javascript:;">{{userInfo.hometown}}</a></span></p>
+      <p><span>昵称 ：<a href="javascript:;" :title="userInfo.name">{{userInfo.name}}</a></span></p>
+      <p><span>家乡 ：<a href="javascript:;" :title="userInfo.hometown">{{userInfo.hometown}}</a></span></p>
       <p><span>性别 ：{{userInfo.sex}}</span></p>
-      <p><span>gitHub：<a href="javascript:;">{{userInfo.github}}</a></span></p>
-      <p><span>email：<a href="javascript:;">{{userInfo.email}}</a></span></p>
+      <p><span>gitHub：<a :href="'http://www.' + userInfo.github" :title="userInfo.github" target="_blank">{{userInfo.github}}</a></span></p>
+      <p><span>email：<a href="javascript:;" :title="userInfo.email">{{userInfo.email}}</a></span></p>
     </div>
     <p class="new-blog"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;<span>最新文章</span></p>
     <div class="new-blog-details">
       <ul>
         <router-link tag="li" v-for="(article, index) in newArticle" :to="{name: 'blog/detail', params: { c_id: article.category_id, d_id: article.id }}" >
-          <a href="javascript:;" >{{index + 1}}.{{article.title}}</a>
+          <a href="javascript:;" :title="article.title">{{index + 1}}.{{article.title}}</a>
         </router-link>
       </ul>
     </div>
@@ -26,8 +26,16 @@
     <div class="reading-list-details">
       <ul>
         <router-link tag="li" v-for="(article, index) in hitsArticle" :to="{name: 'blog/detail', params: { c_id: article.category_id, d_id: article.id }}" >
-          <a href="javascript:;" >{{index + 1}}.{{article.title}}</a>
+          <a href="javascript:;" :title="article.title">{{index + 1}}.{{article.title}}</a>
         </router-link>
+      </ul>
+    </div>
+    <p class="f-link-list"><i class="glyphicon glyphicon-link"></i>&nbsp;<span>友情链接</span></p>
+    <div class="reading-list-details">
+      <ul>
+        <li v-for="(link, index) in friendLinks">
+          <a :href="link.url" target="_blank" :title="link.name">{{index + 1}}.{{link.name}}</a>
+        </li>
       </ul>
     </div>
   </div>
@@ -47,7 +55,8 @@
         broadcast: '',
         userInfo: {},
         newArticle: [],
-        hitsArticle: []
+        hitsArticle: [],
+        friendLinks: []
       }
     },
 
@@ -56,6 +65,7 @@
       this.getUserInfo();
       this.getNewArticle();
       this.getHitsArticle();
+      this.getFriendLinks();
     },
 
     methods: {
@@ -90,6 +100,15 @@
             self.hitsArticle = r.data.hitsArticle;
           }
         }, 0);
+      },
+      getFriendLinks() {
+        const self = this;
+        query.query( appConfig.api.home + 'blog/getFriendLinks', function (r) {
+          //console.log(r);
+          if (r.status === 1) {
+            self.friendLinks = r.data.friendLinks;
+          }
+        }, 0);
       }
     }
   }
@@ -97,7 +116,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  p.notice, p.blogger, p.new-blog, p.reading-list {
+  p.notice, p.blogger, p.new-blog, p.reading-list, p.f-link-list {
     padding: 20px 0 6px;
     margin: 0;
     border-bottom: 1px #e5e5e5 solid;

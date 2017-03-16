@@ -9,12 +9,10 @@
           </div>
           <div class="row">
             <div class="col-md-3">
-              <img class="img-thumbnail" src="../assets/article.jpg">
+              <img class="img-thumbnail" :src="(filePath + article.savepath + article.savename)">
             </div>
             <div class="col-md-9">
-              <div class="content">
-                <p>{{article.content}}</p>
-              </div>
+              <div class="content" v-html="article.content"></div>
             </div>
           </div>
           <div class="row sub-title">
@@ -55,7 +53,8 @@
         emptyArticleMsg: appConfig.emptyArticleMsg,
         maxNum: Number( appConfig.pagerMaxNum ),
         listsCount: 0,
-        pNum: Number( this.$route.params.p_num )
+        pNum: Number( this.$route.params.p_num ),
+        filePath: appConfig.staticPath.file
       }
     },
 
@@ -80,11 +79,10 @@
           pageLimit: appConfig.indexShowNum
         }, function (r) {
           bus.$emit('triggerLoading');
+          //console.log(r);
           if (r.status === 1) {
             self.listsCount = Number( r.data.listsCount );
-            //console.log(self.listsCount);
             self.timeToStr(r.data.lists, function( articles ) {
-              //console.log(articles);
               self.articles = articles;
             });
           }
@@ -96,6 +94,9 @@
         } else {
           details.forEach(function(item) {
             item.create_time = time.format('yyyy年mm月dd日', parseInt(item.create_time * 1000));
+            item.content = item.content.replace(/<[^>]*>/igm, function() {
+              return '';
+            }).substring(0, appConfig.indexContentLength) + '...';
           });
           cb(details || []);
         }
@@ -141,6 +142,7 @@
   }
   article img.img-thumbnail {
     width: 220px;
+    height: 100px;
     padding: 0;
     border-radius: 0;
     overflow: hidden;

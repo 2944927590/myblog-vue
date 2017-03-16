@@ -15,21 +15,14 @@
       </ul>
     </div>
     <div class="col-md-12">
-      <p class="article-content">{{articles.current.content}}</p>
+      <p class="article-content" v-html="articles.current.content"></p>
     </div>
     <div class="col-md-12 article-icon">
-      <ul>
-        <li>
-          <a href="javascript:;"><i class="glyphicon glyphicon-thumbs-up"></i>&nbsp;赞</a>
-        </li>
-        <li>
-          <i class="glyphicon glyphicon-comment"></i>&nbsp;0人评论
-        </li>
-      </ul>
+
     </div>
     <div class="col-md-12">
-      <p class="article-pre" v-if="articles.pre"><router-link :to="{name: 'blog/detail', params: { c_id: this.$route.params.c_id, d_id: articles.pre.id }}"><i class="glyphicon glyphicon-chevron-up"></i>&nbsp;上一篇：{{articles.pre.title}}</router-link></p>
-      <p class="article-next" v-if="articles.next"><router-link :to="{name: 'blog/detail', params: { c_id: this.$route.params.c_id, d_id: articles.next.id }}" ><i class="glyphicon glyphicon-chevron-down"></i>&nbsp;下一篇：{{articles.next.title}}</router-link></p>
+      <p class="article-pre" v-if="articles.pre"><router-link :to="{name: 'blog/detail', params: { c_id: this.$route.params.c_id, d_id: articles.pre.id }}" :title="articles.pre.title"><i class="glyphicon glyphicon-chevron-up"></i>&nbsp;上一篇：{{articles.pre.title}}</router-link></p>
+      <p class="article-next" v-if="articles.next"><router-link :to="{name: 'blog/detail', params: { c_id: this.$route.params.c_id, d_id: articles.next.id }}" :title="articles.next.title"><i class="glyphicon glyphicon-chevron-down"></i>&nbsp;下一篇：{{articles.next.title}}</router-link></p>
     </div>
   </div>
 </template>
@@ -75,7 +68,15 @@
           if (r.status === 1) {
             self.articles = r.data.lists;
             self.articles.current.create_time = time.format('yyyy/mm/dd', parseInt(self.articles.current.create_time) * 1000);
-            //console.log(self.articles);
+
+            self.articles.current.content = self.articles.current.content.replace(/(\<img src=[\'\"]?)([^\'\"]*)([\'\"]?)/igm, function($1, $2, $3, $4) {
+              if( !/.gif/.test($3) ) {
+                return $2 + appConfig.url +  $3 + $4;
+              } else {
+                return $1;
+              }
+            });
+
             bus.$emit('triggerLoading');
           }
         }, 0);
@@ -83,7 +84,11 @@
     }
   }
 </script>
-
+<style>
+  p.article-content img[title] {
+    width: 96%;
+  }
+</style>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .article-title {
@@ -129,7 +134,7 @@
   }
   .article-content {
     padding: 10px 0 20px;
-    text-indent: 2em;
+    min-height: 400px;
   }
   p.article-pre, p.article-next {
     padding: 4px 0;

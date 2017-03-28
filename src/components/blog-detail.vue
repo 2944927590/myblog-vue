@@ -46,8 +46,10 @@
       }
     },
 
-    created() {
-      this.getDetailById();
+    mounted() {
+      this.$nextTick(function () {
+        this.getDetailById();
+      });
     },
 
     watch: {

@@ -60,12 +60,14 @@
       }
     },
 
-    created() {
-      this.getBroadcast();
-      this.getUserInfo();
-      this.getNewArticle();
-      this.getHitsArticle();
-      this.getFriendLinks();
+    mounted() {
+      this.$nextTick(function () {
+        this.getBroadcast();
+        this.getUserInfo();
+        this.getNewArticle();
+        this.getHitsArticle();
+        this.getFriendLinks();
+      });
     },
 
     methods: {

@@ -37,8 +37,9 @@
           </ul>
           <form class="navbar-form navbar-right" role="search">
             <div class="form-group">
-              <input type="text" class="form-control search-input" placeholder="Search">
-            </div> <button type="submit" class="btn btn-default search-button">搜索</button>
+              <input type="text" v-model.trim="searchText" class="form-control search-input" placeholder="Search Title">
+            </div> 
+            <button type="button" class="btn btn-default search-button" @click="searchTitle">搜索</button>
           </form>
         </div>
       </div>
@@ -50,6 +51,7 @@
 
 import query from '../lib/core/data';
 import config from './config/app-config';
+import bus from '../bus';
 
 export default {
 
@@ -58,12 +60,15 @@ export default {
   data() {
     return {
       lists: [],
-      cId: this.$route.params.c_id
+      cId: this.$route.params.c_id,
+      searchText: ''
     }
   },
 
-  created() {
-    this.getNav();
+  mounted() {
+    this.$nextTick(function () {
+      this.getNav();
+    });
   },
 
   watch: {
@@ -86,6 +91,7 @@ export default {
     }
   },
   methods: {
+
     getNav () {
       let self = this;
       self.$emit('loading');
@@ -95,6 +101,17 @@ export default {
           self.$emit('loading');
         }
       }, 1000);
+    },
+
+    searchTitle() {
+      console.log(1);
+      this.$router.push({
+        name: 'blog/search',
+        params: {
+          s_text: this.searchText,
+          p_num: this.$route.params.p_num
+        }
+      });
     }
   }
 }

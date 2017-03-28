@@ -28,8 +28,10 @@
       }
     },
 
-    created() {
-
+    mounted() {
+      this.$nextTick(function () {
+        
+      });
     },
 
     methods: {

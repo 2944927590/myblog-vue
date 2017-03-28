@@ -16,8 +16,10 @@ export default {
     }
   },
 
-  created() {
-
+  mounted() {
+    this.$nextTick(function () {
+      
+    });
   },
 
   methods: {

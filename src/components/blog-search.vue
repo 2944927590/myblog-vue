@@ -60,6 +60,7 @@
 
     mounted() {
       this.$nextTick(function () {
+        //this.bindEvent();
         this.getDetail();
       });
     },
@@ -69,9 +70,9 @@
         return {
           all() {
             this.$router.push({
-              name: 'blog/category',
+              name: 'blog/search',
               params: {
-                c_id: this.$route.params.c_id,
+                s_text: this.$route.params.s_text,
                 p_num: this.current
               }
             });
@@ -91,14 +92,14 @@
       getDetail() {
         const self = this;
         bus.$emit('triggerLoading');
-        query.query( appConfig.api.home + 'blog/getArticleByCategoryId', {
-          categoryId: this.$route.params.c_id,
+        query.query( appConfig.api.home + 'blog/getArticleBySearchText', {
+          searchTitle: self.$route.params.s_text,
           pageNum: this.$route.params.p_num,
           pageLimit: appConfig.indexShowNum
         }, function (r) {
           bus.$emit('triggerLoading');
-          console.log(r);
           if (r.status === 1) {
+            console.log(r);
             self.listsCount = Number( r.data.listsCount );
             self.timeToStr(r.data.lists, function( articles ) {
               self.articles = articles;
@@ -106,7 +107,25 @@
           }
         }, 0);
       },
-      
+      bindEvent() {
+        const self = this;
+        bus.$on('searchTextEvent', (data) => {
+          console.log(!!data);
+          console.log(12123);
+          console.log(12123);
+          if(data) {
+            this.$router.push({
+              name: 'blog/search',
+              params: {
+                s_text: data,
+                p_num: this.$route.params.p_num
+              }
+            });
+            bus.$emit('triggerLoading');
+            self.getDetail();
+          }
+        });
+      },
       timeToStr (details, cb) {
         if(!details || 0 == details.length) {
           cb([]);

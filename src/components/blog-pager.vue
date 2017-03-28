@@ -35,6 +35,17 @@
       currentNum: {
         type: Number,
         default: 1
+      },
+      stepCallback: {
+        type: Object,
+        default() {
+          return {
+            all() {},
+            pre() {}, 
+            next() {}, 
+            step() {}
+          }
+        }
       }
     },
     data() {
@@ -57,6 +68,7 @@
     },
     computed: {
       totals() {
+        console.log(this.stepCallback);
         return Math.ceil( this.totalNum / config.indexShowNum ); //总页数
       },
       currents() {
@@ -128,26 +140,25 @@
         if (event) event.preventDefault();
         if (typeof num !== 'number') { return false }
         this.current = num;
-        this.$router.push({
-          name: 'blog/category',
-          params: {
-            c_id: this.$route.params.c_id,
-            p_num: this.current
-          }
-        });
+
+        if( this.stepCallback.all ) {
+          this.stepCallback.all.apply(this);
+        } 
+        else {
+          this.stepCallback.step.apply(this);
+        }
       },
       step (type, event) {
         if (event) event.preventDefault();
         if (type === 'previous') {
           if (this.current > 1) {
             this.current = this.current - 1;
-            this.$router.push({
-              name: 'blog/category',
-              params: {
-                c_id: this.$route.params.c_id,
-                p_num: this.current
-              }
-            });
+            if( this.stepCallback.all ) {
+              this.stepCallback.all.apply(this);
+            } 
+            else {
+              this.stepCallback.pre.apply(this);
+            }
           } else {
             this.debug && alert('已经第一页了');
             return false;
@@ -155,13 +166,13 @@
         } else if (type === 'next') {
           if (this.current < this.total) {
             this.current = this.current + 1;
-            this.$router.push({
-              name: 'blog/category',
-              params: {
-                c_id: this.$route.params.c_id,
-                p_num: this.current
-              }
-            });
+
+            if( this.stepCallback.all ) {
+              this.stepCallback.all.apply(this);
+            } 
+            else {
+              this.stepCallback.next.apply(this);
+            }
           } else {
             this.debug && alert('已经最后一页了');
             return false;

@@ -109,7 +109,7 @@ export default {
         name: 'blog/search',
         params: {
           s_text: this.searchText,
-          p_num: this.$route.params.p_num
+          p_num: 1
         }
       });
     }

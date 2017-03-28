@@ -19,6 +19,7 @@
 
   export default {
     name: 'app',
+
     components: {
       'blogNav': blogNav,
       'blogMain': blogMain,
@@ -26,15 +27,20 @@
       'blogLoading': blogLoading,
       'blogBackTop': blogBackTop
     },
-    created() {
-      this.bindEvent();
+
+    mounted() {
+      this.$nextTick(function () {
+        this.bindEvent();
+      });
     },
+    
     data() {
       return {
         isLoading: false,
         topHeight: false
       }
     },
+
     methods: {
 
       triggerLoading() {
@@ -53,6 +59,7 @@
           this.debounce(this.doTopHeight, 1000)();
         });
       },
+
       doTopHeight() {
         var top = document.body.scrollTop;
         if (top > 200) {
@@ -61,11 +68,12 @@
           this.topHeight = false;
         }
       },
+
       debounce(fn, delay) {
         let timer = null;
         return function () {
-          let context = this;
-          let args = arguments;
+          const context = this;
+          const args = arguments;
           clearTimeout(timer);
           timer = setTimeout(function() {
             fn.apply(context, args);

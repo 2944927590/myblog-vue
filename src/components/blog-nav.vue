@@ -104,7 +104,7 @@ export default {
     },
 
     searchTitle() {
-      console.log(1);
+      if(!this.searchText) return;
       this.$router.push({
         name: 'blog/search',
         params: {

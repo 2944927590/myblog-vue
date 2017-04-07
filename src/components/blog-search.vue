@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-9">
     <div id="container-left">
-      <div class="headline">文章<span class="font-green">推荐</span></div>
+      <div class="headline">文章<span class="font-green">搜索</span></div>
       <div class="article-list" v-if="listsCount">
         <article v-for="(article, index) in articles">
           <div class="title">
@@ -60,7 +60,6 @@
 
     mounted() {
       this.$nextTick(function () {
-        //this.bindEvent();
         this.getDetail();
       });
     },
@@ -91,15 +90,14 @@
     methods: {
       getDetail() {
         const self = this;
-        bus.$emit('triggerLoading');
+        bus.$emit('showLoading');
         query.query( appConfig.api.home + 'blog/getArticleBySearchText', {
           searchTitle: self.$route.params.s_text,
           pageNum: this.$route.params.p_num,
           pageLimit: appConfig.indexShowNum
         }, function (r) {
-          bus.$emit('triggerLoading');
+          bus.$emit('hideLoading');
           if (r.status === 1) {
-            console.log(r);
             self.listsCount = Number( r.data.listsCount );
             self.timeToStr(r.data.lists, function( articles ) {
               self.articles = articles;
@@ -110,9 +108,6 @@
       bindEvent() {
         const self = this;
         bus.$on('searchTextEvent', (data) => {
-          console.log(!!data);
-          console.log(12123);
-          console.log(12123);
           if(data) {
             this.$router.push({
               name: 'blog/search',

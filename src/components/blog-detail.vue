@@ -62,11 +62,12 @@
     methods: {
       getDetailById() {
         const self = this;
-        bus.$emit('triggerLoading');
+        bus.$emit('showLoading');
         query.query( appConfig.api.home + 'blog/getDetailById', {
           categoryId: this.$route.params.c_id,
           detailId: this.dId
         }, function (r) {
+          bus.$emit('hideLoading');
           if (r.status === 1) {
             self.articles = r.data.lists;
             self.articles.current.create_time = time.format('yyyy/mm/dd', parseInt(self.articles.current.create_time) * 1000);
@@ -78,8 +79,6 @@
                 return $1;
               }
             });
-
-            bus.$emit('triggerLoading');
           }
         }, 0);
       }

@@ -104,7 +104,10 @@ export default {
     },
 
     searchTitle() {
-      if(!this.searchText) return;
+      if( !this.searchText ) {
+        $(this.$el.querySelector('.search-input')).focus();
+        return;
+      }
       this.$router.push({
         name: 'blog/search',
         params: {

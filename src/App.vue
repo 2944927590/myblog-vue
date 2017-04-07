@@ -17,6 +17,8 @@
   import blogLoading from './components/blog-loading.vue';
   import blogBackTop from './components/blog-backtop.vue';
 
+  let loadingStatus = [];
+
   export default {
     name: 'app',
 
@@ -48,8 +50,15 @@
       },
 
       bindEvent () {
-        bus.$on('triggerLoading', () => {
-          this.isLoading = !this.isLoading;
+
+        bus.$on('showLoading', () => {
+          loadingStatus.push(1);
+          this.isLoading = !!loadingStatus.length;
+        });
+
+        bus.$on('hideLoading', () => {
+          loadingStatus.shift();
+          this.isLoading = !!loadingStatus.length;
           if ( !this.isLoading ) {
             this.scrollToTop();
           }
@@ -58,6 +67,7 @@
         $(window).scroll(() => {
           this.debounce(this.doTopHeight, 1000)();
         });
+
       },
 
       doTopHeight() {

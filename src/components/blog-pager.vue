@@ -68,7 +68,6 @@
     },
     computed: {
       totals() {
-        console.log(this.stepCallback);
         return Math.ceil( this.totalNum / config.indexShowNum ); //总页数
       },
       currents() {

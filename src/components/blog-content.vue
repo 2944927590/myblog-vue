@@ -90,14 +90,13 @@
     methods: {
       getDetail() {
         const self = this;
-        bus.$emit('triggerLoading');
+        bus.$emit('showLoading');
         query.query( appConfig.api.home + 'blog/getArticleByCategoryId', {
           categoryId: this.$route.params.c_id,
           pageNum: this.$route.params.p_num,
           pageLimit: appConfig.indexShowNum
         }, function (r) {
-          bus.$emit('triggerLoading');
-          console.log(r);
+          bus.$emit('hideLoading');
           if (r.status === 1) {
             self.listsCount = Number( r.data.listsCount );
             self.timeToStr(r.data.lists, function( articles ) {

@@ -78,9 +78,6 @@
         this.total = this.totals;
         this.current = this.currents;
 
-//        console.log(this.total);
-//        console.log(this.current);
-//        console.log(this.max);
 
         if ( typeof this.total !== 'number'
           || typeof this.current !== 'number'
